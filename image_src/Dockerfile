@@ -1,4 +1,4 @@
-FROM python:3.7-slim-stretch
+FROM python:3.7.4-alpine3.10
 
 WORKDIR /app/cf
 
@@ -6,10 +6,8 @@ WORKDIR /app/cf
 COPY . /app/cf/
 
 # Install dependencies
-RUN apt update && \
-    apt install curl -y && \
-    pip3 install cloudflare \
-    pip3 install psutil
+RUN pip3 install cloudflare && \
+    apk add --no-cache build-base curl python3-dev py-psutil
 
 # Define environment variable
 ENV FRITZBOX_ADDRESS=fritz.box
