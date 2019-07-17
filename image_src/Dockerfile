@@ -6,7 +6,10 @@ WORKDIR /app/cf
 COPY . /app/cf/
 
 # Install dependencies
-RUN apt update && apt install curl -y && pip3 install cloudflare
+RUN apt update && \
+    apt install curl -y && \
+    pip3 install cloudflare \
+    pip3 install psutil
 
 # Define environment variable
 ENV FRITZBOX_ADDRESS=fritz.box
@@ -14,6 +17,9 @@ ENV CF_EMAIL=None
 ENV CF_TOKEN=None
 ENV ZONES_TO_UPDATE=None
 ENV HOSTS_TO_IGNORE=None
+
+HEALTHCHECK --start-period=5s \
+  CMD ["python3", "healthcheck.py"]
 
 # Run app.py when the container launches
 CMD ["python3", "cfupdater.py"]
