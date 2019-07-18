@@ -16,5 +16,7 @@ ENV FRITZBOX_ADDRESS=fritz.box \
     ZONES_TO_UPDATE=None \
     HOSTS_TO_IGNORE=None
 
+HEALTHCHECK NONE
+
 # Run app.py when the container launches
 CMD ["python3", "cfupdater.py"]

@@ -6,14 +6,13 @@ Created on Jun 19, 2019
 
 
 from threading import Thread
-from os import path
-from os import environ
+from os import path, environ
 
 
 # ENVVARS
 LOCATION = path.dirname(path.abspath(__file__))
-ZONES_TO_UPDATE = environ['ZONES_TO_UPDATE']
-HOSTS_TO_IGNORE = environ['HOSTS_TO_IGNORE']
+ZONES_TO_UPDATE = environ['ZONES_TO_UPDATE'].replace(' ', '').split(",")
+HOSTS_TO_IGNORE = environ['HOSTS_TO_IGNORE'].replace(' ', '').split(",")
 CF_EMAIL = environ['CF_EMAIL']
 CF_TOKEN = environ['CF_TOKEN']
 
@@ -28,9 +27,9 @@ class IPScanner(Thread):
         self.counter = 1    # Default
 
 
-    def run(self):  # Deamon, welcher checkt, wann sich die IP ändert
+    def run(self):  # Thread, which checks, when the external IP changes
 
-        printToLog("IPScanner Thread gestartet")
+        printToLog("IPScanner Thread started")
         from time import sleep
 
         ip = getIP()
@@ -42,7 +41,7 @@ class IPScanner(Thread):
             ip = getIP()
 
             if ip != oldip:
-                printToLog("Ungleiche IPs erkannt (Alt: {}, Neu: {}). Update wird gestartet".format(oldip, ip))
+                printToLog("IP change detected (Old: {}, New: {}). Starting update...".format(oldip, ip))
                 updateARecords(ip)
 
 
@@ -54,19 +53,19 @@ def getIP():
 
         ip = os.popen('{}/get_ipv4.sh'.format(LOCATION)).read().replace("\n", "")
         if ip == "":
-            printToLog("Konnte externe IP nicht via UPnP anfragen. Starte Ipifiy API...")
+            printToLog("Couldn't get external IP via UPnP. Starting Ipifiy API...")
             ip = get('https://api.ipify.org').text
             if ip == "":
-                printToLog("Konnte Ipifiy API nicht ansprechen")
+                printToLog("Couldn't call Ipifiy API")
                 return None
             else: return ip
         else:
             #printToLog("Discovered IPv4: {}".format(ip))
             return ip
     except Exception as e:
-        printToLog("Kritischer Fehler beim Abfragen der externen IP: {}".format(e))
+        printToLog("Critical error while retrieving external IP: {}".format(e))
     except:
-        printToLog("Kritischer Fehler beim Abfragen der externen IP. Fehlertyp konnte nicht festgestellt werden.")
+        printToLog("Critical error while retreiving external IP. Type unknown.")
 
 
 
@@ -82,7 +81,7 @@ def printToLog(string):
 
 def updateARecords(extip):
 
-    printToLog("Starte A Record Updates mit IP Adresse: {}".format(extip))
+    printToLog("Starting A record updates with IP adress: {}".format(extip))
 
     from CloudFlare import CloudFlare, exceptions as cf_exceptions
 
@@ -96,7 +95,9 @@ def updateARecords(extip):
             if cf_zone['name'] in ZONES_TO_UPDATE:
                 updateZones.append(cf_zone)
 
-        if len(updateZones) == 0: printToLog("Zonen, welche geupdated werden sollen, wurden nicht gefunden")
+        if len(updateZones) == 0: printToLog("Zones to update not found in Cloudflare")
+
+        updatedZones = []
 
         for zone in updateZones:
             dns_records = cf.zones.dns_records.get(zone['id'])
@@ -105,10 +106,10 @@ def updateARecords(extip):
                     #print("{}\n\n".format(dns_record))
                     if dns_record['name'] not in HOSTS_TO_IGNORE:
                         dns_record['content'] = extip
-                        result = cf.zones.dns_records.put(zone['id'], dns_record['id'], data=dns_record)
-                        #print(result)
+                        cf.zones.dns_records.put(zone['id'], dns_record['id'], data=dns_record)
+                        updatedZones.append(dns_record['name'])
 
-        printToLog("A Record Updates erfolgreich ausgeführt")
+        printToLog("A record updates successfull")
 
     except cf_exceptions.CloudFlareAPIError as e:
         printToLog("CloudFlareAPIError in updateARecords(): {}".format(e))
@@ -116,7 +117,7 @@ def updateARecords(extip):
 
 def main():
 
-    printToLog("Programm gestartet")
+    printToLog("Program started")
 
     # Initial Update
     updateARecords(getIP())
