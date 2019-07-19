@@ -29,7 +29,7 @@ class IPScanner(Thread):
 
     def run(self):  # Thread, which checks, when the external IP changes
 
-        printToLog("IPScanner Thread started")
+        printToLog("IPScanner thread started")
         from time import sleep
 
         ip = getIP()
@@ -81,7 +81,7 @@ def printToLog(string):
 
 def updateARecords(extip):
 
-    printToLog("Starting A record updates with IP adress: {}".format(extip))
+    printToLog("Starting A record updates with IP address: {}".format(extip))
 
     from CloudFlare import CloudFlare, exceptions as cf_exceptions
 

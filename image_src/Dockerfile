@@ -1,4 +1,4 @@
-FROM python:3.7.4-alpine3.10
+FROM alpine:3.7
 
 WORKDIR /app/cf
 
@@ -6,8 +6,8 @@ WORKDIR /app/cf
 COPY . /app/cf/
 
 # Install dependencies
-RUN pip3 install cloudflare && \
-    apk add --no-cache bash curl
+RUN apk add --no-cache bash python3 curl && \
+    pip3 install --no-cache --upgrade pip setuptools wheel cloudflare
 
 # Define environment variable
 ENV FRITZBOX_ADDRESS=fritz.box \
@@ -19,4 +19,4 @@ ENV FRITZBOX_ADDRESS=fritz.box \
 HEALTHCHECK NONE
 
 # Run app.py when the container launches
-CMD ["python3", "cfupdater.py"]
+CMD python3 cfupdater.py
