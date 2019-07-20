@@ -1,5 +1,7 @@
 FROM alpine:3.7
 
+LABEL maintainer="Leon Schmidt"
+
 WORKDIR /app/cf
 
 # Copy the current directory contents into the container at /app
@@ -16,7 +18,5 @@ ENV FRITZBOX_ADDRESS=fritz.box \
     ZONES_TO_UPDATE=None \
     HOSTS_TO_IGNORE=None
 
-HEALTHCHECK NONE
-
 # Run app.py when the container launches
-CMD python3 cfupdater.py
+CMD ["python3", "-u", "cfupdater.py"]

@@ -117,7 +117,7 @@ def updateARecords(extip):
 
 def main():
 
-    printToLog("Program started")
+    printToLog("Updater started")
 
     # Initial Update
     updateARecords(getIP())
