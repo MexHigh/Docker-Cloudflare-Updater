@@ -38,7 +38,9 @@ def updateARecords(extip):
             if cf_zone['name'] in ZONES_TO_UPDATE:
                 updateZones.append(cf_zone)
 
-        if len(updateZones) == 0: utils.printToLog("Zones to update not found in Cloudflare")
+        if len(updateZones) == 0: 
+            utils.printToLog("Zones to update not found in Cloudflare")
+            return
 
         updatedZones = []
 
@@ -74,7 +76,9 @@ def updateAAAARecords(extip):
             if cf_zone['name'] in ZONES_TO_UPDATE:
                 updateZones.append(cf_zone)
 
-        if len(updateZones) == 0: utils.printToLog("Zones to update not found in Cloudflare")
+        if len(updateZones) == 0: 
+            utils.printToLog("Zones to update not found in Cloudflare")
+            return
 
         updatedZones = []
 
