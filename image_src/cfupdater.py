@@ -25,7 +25,7 @@ CF_TOKEN = environ['CF_TOKEN']
 
 def updateRecords(recType, extip):
 
-    utils.printToLog("Starting A record updates with IP address: {}".format(extip))
+    utils.printToLog("Starting {} record updates with IP address: {}".format(recType, extip))
 
     from CloudFlare import CloudFlare, exceptions as cf_exceptions
 
