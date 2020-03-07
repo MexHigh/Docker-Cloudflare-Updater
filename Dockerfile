@@ -5,7 +5,7 @@ LABEL maintainer="Leon Schmidt"
 WORKDIR /app/cf
 
 # Copy the current directory contents into the container at /app
-COPY . /app/cf/
+COPY ./image_src/ /app/cf/
 
 # Install dependencies
 RUN apk add --no-cache bash python3 curl && \

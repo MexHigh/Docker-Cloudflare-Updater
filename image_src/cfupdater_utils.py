@@ -4,11 +4,9 @@ import os
 from requests import get
 
 
-
 def getIPv4():
 
     try:
-
         ip = os.popen('{}/get_ipv4.sh'.format(LOCATION)).read().replace("\n", "")
         if ip == "":
             printToLog("Couldn't get external IPv4 via UPnP. Starting Ipifiy API...")
@@ -26,12 +24,11 @@ def getIPv4():
         printToLog("Critical error while retreiving external IPv4. Type unknown.")
 
 
-def getIPv6():      ## TODO Fucking zum laufen kriegen
+def getIPv6():
     
     try:
-
-        ip = ""     # TODO TEMP
-        if ip == "":
+        ip = os.popen("ip -6 a | grep 'scope global'").read().replace("scope global dynamic", "").replace("inet6", "").replace(" ", "").split("/")[0]
+        if ip == "":    # TODO dieser Fall wird nie eintreten glaub ich
             printToLog("Couldn't get external IPv6 via UPnP. Starting Ipifiy API...")
             ip = get('https://api6.ipify.org').text
             if ip == "":
@@ -39,7 +36,7 @@ def getIPv6():      ## TODO Fucking zum laufen kriegen
                 return None
             else: return ip
         else:
-            #printToLog("Discovered IPv4: {}".format(ip))
+            #printToLog("Discovered IPv6: {}".format(ip))
             return ip
     except Exception as e:
         printToLog("Critical error while retrieving external IPv6: {}".format(e))
