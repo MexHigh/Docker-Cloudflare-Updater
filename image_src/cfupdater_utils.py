@@ -25,9 +25,9 @@ def getIPv4():
 
 
 def getIPv6():
-    
+
     try:
-        ip = os.popen("ip -6 a | grep 'scope global'").read().replace("scope global dynamic", "").replace("inet6", "").replace(" ", "").split("/")[0]
+        ip = os.popen("ip -6 a | grep 'scope global'").read().split("scope", 1)[0].replace("inet6", "").replace(" ", "").split("/")[0]
         if ip == "":    # TODO dieser Fall wird nie eintreten glaub ich
             printToLog("Couldn't get external IPv6 via UPnP. Starting Ipifiy API...")
             ip = get('https://api6.ipify.org').text
