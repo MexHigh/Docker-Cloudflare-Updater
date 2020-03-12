@@ -39,7 +39,7 @@ def updateRecords(recType, extip):
             if cf_zone['name'] in ZONES_TO_UPDATE:
                 updateZones.append(cf_zone)
 
-        if len(updateZones) == 0: 
+        if len(updateZones) == 0:
             utils.printToLog("Zones to update not found in Cloudflare")
             return
 
@@ -56,7 +56,7 @@ def updateRecords(recType, extip):
                         #print("Updated " + dns_record['name'])
                         updatedZones.append(dns_record['name'])
 
-        utils.printToLog("A record updates successfull")
+        utils.printToLog("{} record updates successfull".format(recType))
 
     except cf_exceptions.CloudFlareAPIError as e:
         utils.printToLog("CloudFlareAPIError in updateARecords(): {}".format(e))
