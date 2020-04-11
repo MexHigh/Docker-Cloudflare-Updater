@@ -18,6 +18,7 @@ ZONES_TO_UPDATE = environ['ZONES_TO_UPDATE'].replace(' ', '').split(",")
 HOSTS_TO_UPDATE = environ['HOSTS_TO_UPDATE'].replace(' ', '').split(",")
 HOSTS_TO_IGNORE = environ['HOSTS_TO_IGNORE'].replace(' ', '').split(",")
 WITH_IPV6 = bool(environ['WITH_IPV6'])
+IPV6_WRONG_PREFIXES = ["fc", "fd", "fe"]
 CF_EMAIL = environ['CF_EMAIL']
 CF_TOKEN = environ['CF_TOKEN']
 

@@ -1,4 +1,4 @@
-from cfupdater import LOCATION
+from cfupdater import LOCATION, IPV6_WRONG_PREFIXES
 
 import os
 from requests import get
@@ -27,8 +27,12 @@ def getIPv4():
 def getIPv6():
 
     try:
-        ip = os.popen("ip -6 a | grep 'scope global'").read().split("scope", 1)[0].replace("inet6", "").replace(" ", "").split("/")[0]
-        if ip == "":    # TODO dieser Fall wird nie eintreten glaub ich
+        ip = ""
+        ips = list(ipUnparsed.split("scope")[0].split("/")[0] for ipUnparsed in os.popen("ip -6 a | grep 'scope global'").read().replace(" ","").replace("inet6", "").split("\n")[0:-1])
+        for ipToBeTested in ips:
+          if not any(ipToBeTested.startswith(wrongPrefix) for wrongPrefix in IPV6_WRONG_PREFIXES):
+            ip = ipToBeTested
+        if ip == "":
             printToLog("Couldn't get external IPv6 via UPnP. Starting Ipifiy API...")
             ip = get('https://api6.ipify.org').text
             if ip == "":
