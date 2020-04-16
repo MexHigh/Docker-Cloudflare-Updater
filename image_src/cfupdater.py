@@ -16,7 +16,6 @@ from os import path, environ
 LOCATION = path.dirname(path.abspath(__file__))
 ZONES_TO_UPDATE = environ['ZONES_TO_UPDATE'].replace(' ', '').split(",")
 HOSTS_TO_UPDATE = environ['HOSTS_TO_UPDATE'].replace(' ', '').split(",")
-HOSTS_TO_IGNORE = environ['HOSTS_TO_IGNORE'].replace(' ', '').split(",")
 WITH_IPV6 = bool(environ['WITH_IPV6'])
 IPV6_WRONG_PREFIXES = ["fc", "fd", "fe"]
 CF_EMAIL = environ['CF_EMAIL']
@@ -47,7 +46,7 @@ def updateRecords(recType, extip):
         updatedZones = []
 
         for zone in updateZones:
-            dns_records = cf.zones.dns_records.get(zone['id'])
+            dns_records = cf.zones.dns_records.get(zone['id'], params={'per_page': 100})
             for dns_record in dns_records:
                 if dns_record['type'] == recType:
                     #print("{}\n\n".format(dns_record))
