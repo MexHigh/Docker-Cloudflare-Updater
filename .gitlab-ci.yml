@@ -1,0 +1,12 @@
+image: docker:dind
+
+variables:
+  DOCKER_HOST: tcp://192.168.10.3:2375
+
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+build_image:
+  script:
+    - docker build -t $CI_REGISTRY/leon/cfupdater:latest .
+    - docker push $CI_REGISTRY/leon/cfupdater:latest
