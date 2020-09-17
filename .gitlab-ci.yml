@@ -1,5 +1,5 @@
 variables:
-  DOCKER_HOST: tcp://192.168.10.3:2378
+  DOCKER_HOST: tcp://0.0.0.0:2375
 
 before_script:
   - docker info
