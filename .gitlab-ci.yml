@@ -1,5 +1,7 @@
+image: docker:dind
+
 variables:
-  DOCKER_HOST: tcp://0.0.0.0:2375
+  DOCKER_HOST: tcp://192.168.10.3:2375
 
 before_script:
   - docker info
@@ -8,4 +10,3 @@ build_image:
   script:
     - docker build -t registry.git.leon.wtf/leon/cfupdater:latest .
     - docker push registry.git.leon.wtf/leon/cfupdater:latest
-    
