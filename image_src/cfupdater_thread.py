@@ -16,20 +16,19 @@ class IPv4Scanner(Thread):
 
         utils.printToLog("IPv4Scanner thread started")
         
-        ip, oldip = ""
+        ip = None
+        oldip = None
         
         while True:
 
-            sleep(60)
-
             ip = utils.getIPv4()
-            if ip == None:
-                continue
 
-            if ip != oldip:
+            if ip != None and ip != oldip:
                 utils.printToLog("IPv4 change detected (Old: {}, New: {}). Starting update...".format(oldip, ip))
                 main.updateRecords("A", ip)
                 oldip = ip
+            
+            sleep(60)
 
 
 class IPv6Scanner(Thread):
@@ -42,17 +41,16 @@ class IPv6Scanner(Thread):
 
         utils.printToLog("IPv6Scanner thread started")
 
-        ip, oldip = ""
+        ip = None
+        oldip = None
 
         while True:
 
-            sleep(60)
-
             ip = utils.getIPv6()
-            if ip == None: 
-                continue
 
-            if ip != oldip:
+            if ip != None and ip != oldip:
                 utils.printToLog("IPv6 change detected (Old: {}, New: {}). Starting update...".format(oldip, ip))
                 main.updateRecords("AAAA", ip)
                 oldip = ip
+
+            sleep(60)
