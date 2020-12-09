@@ -66,14 +66,17 @@ def main():
 
     utils.printToLog("Updater started")
 
-    updateRecords("A", utils.getIPv4())
-    thread_ipv4 = threads.IPv4Scanner(1)
+    thread_ipv4 = threads.IPv4Scanner()
     thread_ipv4.start()
 
     if WITH_IPV6:
-        updateRecords("AAAA", utils.getIPv6())
-        thread_ipv6 = threads.IPv6Scanner(2)
+        thread_ipv6 = threads.IPv6Scanner()
         thread_ipv6.start()
+
+    # wait for both threads to stop
+    thread_ipv4.join()
+    if WITH_IPV6:
+        thread_ipv6.join()
 
 
 if __name__ == '__main__':

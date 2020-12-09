@@ -8,51 +8,49 @@ from time import sleep
 
 class IPv4Scanner(Thread):
 
-    def __init__(self, threadID):
+    def __init__(self):
         Thread.__init__(self)
-        self.threadID = threadID
         self.name = "IPv4Scanner"
-        self.counter = 1    # Default
-
 
     def run(self):  # Thread, which checks, when the external IP changes
 
         utils.printToLog("IPv4Scanner thread started")
-
-        ip = utils.getIPv4()
-
+        
+        ip = None
+        oldip = None
+        
         while True:
 
-            oldip = ip
-            sleep(60)
             ip = utils.getIPv4()
 
-            if ip != oldip:
-                utils.printToLog("IPv4 change detected (Old: {}, New: {}). Starting update...".format(oldip, ip))
+            if ip != None and ip != oldip:
+                utils.printToLog("IPv4 change detected (Old: {}, New: {})".format(oldip, ip))
                 main.updateRecords("A", ip)
+                oldip = ip
+            
+            sleep(60)
 
 
 class IPv6Scanner(Thread):
 
-    def __init__(self, threadID):
+    def __init__(self):
         Thread.__init__(self)
-        self.threadID = threadID
         self.name = "IPv6Scanner"
-        self.counter = 1    # Default
-
 
     def run(self):  # Thread, which checks, when the external IP changes
 
         utils.printToLog("IPv6Scanner thread started")
 
-        ip = utils.getIPv6()
+        ip = None
+        oldip = None
 
         while True:
 
-            oldip = ip
-            sleep(60)
             ip = utils.getIPv6()
 
-            if ip != oldip:
-                utils.printToLog("IPv6 change detected (Old: {}, New: {}). Starting update...".format(oldip, ip))
+            if ip != None and ip != oldip:
+                utils.printToLog("IPv6 change detected (Old: {}, New: {})".format(oldip, ip))
                 main.updateRecords("AAAA", ip)
+                oldip = ip
+
+            sleep(60)
