@@ -5,7 +5,6 @@ from threading import Thread
 from time import sleep
 
 
-
 class IPv4Scanner(Thread):
 
     def __init__(self):

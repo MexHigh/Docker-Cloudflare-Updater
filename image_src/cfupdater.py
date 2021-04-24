@@ -4,13 +4,10 @@ Created on Jun 19, 2019
 @author: Leon Schmidt
 '''
 
-
 import cfupdater_utils as utils
 import cfupdater_thread as threads
 
 from os import path, environ
-
-
 
 # ENVVARS
 LOCATION = path.dirname(path.abspath(__file__))
@@ -20,7 +17,6 @@ WITH_IPV6 = bool(environ['WITH_IPV6'])
 IPV6_WRONG_PREFIXES = ["fc", "fd", "fe"]
 CF_EMAIL = environ['CF_EMAIL']
 CF_TOKEN = environ['CF_TOKEN']
-
 
 
 def updateRecords(recType, extip):
