@@ -1,3 +1,5 @@
+**Important:** This repo was **deprecated** in favor of https://git.leon.wtf/leon/new-cfupdater !!!
+
 # Usage
 
 ## Configuration via config.env
